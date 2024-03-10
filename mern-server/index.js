@@ -2,9 +2,10 @@ const express = require("express");
 const app = express();
 
 const cors = require("cors");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 require("dotenv").config();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
 
 //this middleware will make connection  to the front end side
 app.use(cors());
@@ -16,7 +17,6 @@ app.get("/", (req, res) => {
 
 //Mongodb connection
 
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =process.env.MONGODB;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -34,7 +34,7 @@ async function run() {
     await client.connect();
 
     //here we are creating the documents
-    const bookCollections = client.db("BookStore").collection("books");
+    const bookCollections = client.db("BookInventory").collection("books");
     const FeedBackCollections = client.db("BookInventory").collection("feedback");
 
     //insert feedback to the collection

@@ -110,7 +110,7 @@ const Logout = () => {
               type="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="name@flowbite.com"
+              placeholder="name@gmail.com"
               required
               shadow
             />
