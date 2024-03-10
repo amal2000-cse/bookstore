@@ -43,7 +43,7 @@ const router = createBrowserRouter([
         element: <SingleBook />,
         //now gettting the id and getting the data from the backend and sending to the next page using loader
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/book/${params.id}`),
+          fetch(`https://bookstore-tn2h.onrender.com/book/${params.id}`),
       },
       // {
       //   path: "/admin/dashboard",
@@ -98,7 +98,7 @@ const router = createBrowserRouter([
         element: <EditBooks />,
         //now gettting the id and getting the data from the backend and sending to the next page using loader
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/book/${params.id}`),
+          fetch(`https://bookstore-tn2h.onrender.com/book/${params.id}`),
       },
      
     ],

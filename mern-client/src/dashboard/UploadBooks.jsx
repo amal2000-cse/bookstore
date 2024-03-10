@@ -54,7 +54,7 @@ const UploadBooks = () => {
     };
     // console.log(bookObj);
     // now sending data to database
-    fetch("http://localhost:5000/upload-book", {
+    fetch("https://bookstore-tn2h.onrender.com/upload-book", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

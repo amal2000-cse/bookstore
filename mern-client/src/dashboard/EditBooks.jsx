@@ -71,7 +71,7 @@ const EditBooks = () => {
     // now sending data to database
 
     //update book
-    fetch(`http://localhost:5000/book/${id}`, {
+    fetch(`https://bookstore-tn2h.onrender.com/book/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
