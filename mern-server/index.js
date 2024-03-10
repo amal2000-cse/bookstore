@@ -1,23 +1,23 @@
-const express = require('express');
-const app=express();
+const express = require("express");
+const app = express();
+
+const cors = require("cors");
+
+require("dotenv").config();
 const port = process.env.PORT || 5000;
-const cors = require('cors')
 
 //this middleware will make connection  to the front end side
 app.use(cors());
 app.use(express.json());
 
-
-app.get('/',(req,res)=>{
-    res.send('welcome to the book store')
-})
-
-
+app.get("/", (req, res) => {
+  res.send("welcome to the book store");
+});
 
 //Mongodb connection
 
-const { MongoClient, ServerApiVersion,ObjectId } = require('mongodb');
-const uri = "mongodb+srv://amal:suvarnam123@cluster0.qiv6hdh.mongodb.net/?retryWrites=true&w=majority";
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const uri =process.env.MONGODB;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -25,7 +25,7 @@ const client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
 
 async function run() {
@@ -34,33 +34,31 @@ async function run() {
     await client.connect();
 
     //here we are creating the documents
-    const bookCollections = client.db('BookInventory').collection("books");
-    const FeedBackCollections = client.db('BookInventory').collection("feedback");
+    const bookCollections = client.db("BookStore").collection("books");
+    const FeedBackCollections = client.db("BookInventory").collection("feedback");
 
     //insert feedback to the collection
-    app.post("/feedback",async(req,res)=>{
-      const data=req.body;
+    app.post("/feedback", async (req, res) => {
+      const data = req.body;
       const result = await FeedBackCollections.insertOne(data);
       // console.log(result)
       res.send(result);
-    })
+    });
 
     //getting all the feedback
-    app.get('/feedback',async(req,res)=>{
-      const feedback =  FeedBackCollections.find();
+    app.get("/feedback", async (req, res) => {
+      const feedback = FeedBackCollections.find();
       const result = await feedback.toArray();
-      res.send(result)
-    })
-
-
+      res.send(result);
+    });
 
     //insert a book to the db: post method
-    app.post("/upload-book",async(req,res)=>{
-      const data=req.body;
+    app.post("/upload-book", async (req, res) => {
+      const data = req.body;
       const result = await bookCollections.insertOne(data);
       // console.log(result)
       res.send(result);
-    })
+    });
 
     //get all books from the database
     // app.get('/all-books',async(req,res)=>{
@@ -71,55 +69,52 @@ async function run() {
     // })
 
     //update a book data
-    app.patch('/book/:id',async(req,res)=>{
-      const id=req.params.id;
+    app.patch("/book/:id", async (req, res) => {
+      const id = req.params.id;
       const updatedBookDate = req.body;
-      const filter = {_id:new ObjectId(id)};
+      const filter = { _id: new ObjectId(id) };
       const updateDoc = {
-        $set:{
-          ...updatedBookDate
+        $set: {
+          ...updatedBookDate,
         },
-      }
-      const options = {upsert :true};
+      };
+      const options = { upsert: true };
       //now update
-      const result = await bookCollections.updateOne(filter,updateDoc,options);
+      const result = await bookCollections.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
       res.send(result);
-      
-    })
+    });
 
     //for delete method
-    app.delete('/book/:id',async(req,res)=>{
-      const id=req.params.id;
-      const filter = {_id:new ObjectId(id)};
-      const options = {upsert :true};
+    app.delete("/book/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
       //now update
-      const result = await bookCollections.deleteOne(filter,options);
+      const result = await bookCollections.deleteOne(filter, options);
       res.send(result);
-      
-    })
+    });
 
     //now filtering by category using req.query
-    app.get("/all-books",async(req,res)=>{
+    app.get("/all-books", async (req, res) => {
       let query = {};
-      if(req.query.category){
-        query = {category:req.query.category}
+      if (req.query.category) {
+        query = { category: req.query.category };
       }
       const result = await bookCollections.find(query).toArray();
-      res.send(result)
-    })
+      res.send(result);
+    });
 
     //to get single book based on id
-    app.get('/book/:id',async(req,res)=>{
-      const id=req.params.id;
-      const filter = {_id:new ObjectId(id)};
+    app.get("/book/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
       const result = await bookCollections.findOne(filter);
-      res.send(result)
-    })
-
-
-
-
-
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -131,9 +126,6 @@ async function run() {
 }
 run().catch(console.dir);
 
-
-
-
-app.listen(port,()=>{
-    console.log(`server is running on ${port}`)
-})
+app.listen(port, () => {
+  console.log(`server is running on ${port}`);
+});
