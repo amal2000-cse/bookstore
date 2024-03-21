@@ -40,13 +40,13 @@ No installation steps are required as this project is hosted on GitHub.
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/book-store-management.git
+    git clone https://github.com/amal2000-cse/bookstore
     ```
 
 2. Navigate to the project directory:
 
     ```bash
-    cd book-store-management
+    cd bookstore
     ```
 
 3. Start the backend server:
